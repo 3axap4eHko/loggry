@@ -23,7 +23,7 @@ describe('Logger test suite', () => {
     });
 
     it('Should log info', () => {
-      const level = logger.LogLevel.silly;
+      const level = 'silly';
       const message = 'test';
       const details = 'details';
 

@@ -1,13 +1,13 @@
 export enum LogLevel {
-  silent = 'silent',
-  error = 'error',
-  warn = 'warn',
-  notice = 'notice',
-  http = 'http',
-  timing = 'timing',
-  info = 'info',
-  verbose = 'verbose',
-  silly = 'silly',
+  silent,
+  error,
+  warn,
+  notice,
+  http,
+  timing,
+  info,
+  verbose,
+  silly,
 }
 
 export type LogLevels = keyof typeof LogLevel;
@@ -50,13 +50,13 @@ export const log = <T = any>(level: LogLevels, message: string, details?: T) => 
   process.emit(EVENT_NAME, { level, message, details, timestamp });
 };
 
-export const verbose = <T = any>(message: string, details?: T) => log(LogLevel.verbose, message, details);
+export const verbose = <T = any>(message: string, details?: T) => log('verbose', message, details);
 
-export const info = <T = any>(message: string, details?: T) => log(LogLevel.info, message, details);
+export const info = <T = any>(message: string, details?: T) => log('info', message, details);
 
-export const warn = <T = any>(message: string, details?: T) => log(LogLevel.warn, message, details);
+export const warn = <T = any>(message: string, details?: T) => log('warn', message, details);
 
-export const error = <T = any>(message: string, details?: T) => log(LogLevel.error, message, details);
+export const error = <T = any>(message: string, details?: T) => log('error', message, details);
 
 export const addListener = (listener: LogListener) => process.on(EVENT_NAME, listener);
 
