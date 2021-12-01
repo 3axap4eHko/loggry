@@ -1,6 +1,6 @@
 {
   "name": "loggry",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Lightweight NodeJS logger bus",
   "main": "build/index.js",
   "scripts": {
