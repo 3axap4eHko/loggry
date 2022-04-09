@@ -1,6 +1,5 @@
-/.idea
-/.github
-/coverage
-/src
-/jest.*
-/*.log*
+/*
+!/build
+!/package.json
+!/README.md
+
