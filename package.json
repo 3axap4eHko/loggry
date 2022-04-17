@@ -5,17 +5,12 @@
   "type": "module",
   "main": "build/index.cjs",
   "types": "build/index.d.ts",
-  "module": "./build/index.js",
+  "module": "build/index.js",
   "sideEffects": false,
   "files": [
     "build",
     "src/*.ts"
   ],
-  "exports": {
-    "import": "./build/index.js",
-    "default": "./build/index.js",
-    "require": "./build/index.cjs"
-  },
   "scripts": {
     "convert-cjs": "node scripts/convert-cjs.js",
     "build": "rm -rf build && yarn build:cjs && yarn build:mjs",
