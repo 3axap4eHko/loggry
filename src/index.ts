@@ -27,7 +27,6 @@ export interface LogListener<T = any> {
 declare global {
   namespace NodeJS {
     interface Process {
-      on(event: 'uncaughtException', listener: (...args: any[]) => void): this;
       emit(event: 'log', log: LogEvent<any>): boolean;
       on(event: 'log', listener: LogListener): this;
       listeners(event: 'log'): LogListener[];
@@ -37,10 +36,15 @@ declare global {
 
 const EVENT_NAME = 'log';
 
+export const getObject = (target: any) => {
+  return target && typeof target === 'object' ? Object.getOwnPropertyNames(target).reduce((result, key) => ({ ...result, [key]: target[key] }), {} as Record<string, any>) : target;
+}
+
 export const defaultLogger = (event: LogEvent<any>) => {
   const count = process.listenerCount(EVENT_NAME);
   if (count === 1) {
-    process.stderr.write(JSON.stringify({ error: `No loggers are registered`, ...event }));
+    const details = getObject(event.details);
+    process.stderr.write(JSON.stringify({ level: 'warn', message: `No loggers are registered`, details, timestamp: Date.now() }) + '\n')
   }
 };
 
@@ -63,5 +67,4 @@ export const addListener = (listener: LogListener) => process.on(EVENT_NAME, lis
 export const removeListener = (listener: LogListener) => process.off(EVENT_NAME, listener);
 
 process.on(EVENT_NAME, defaultLogger);
-
 process.on('uncaughtException', (err, origin) => error(origin, err));
