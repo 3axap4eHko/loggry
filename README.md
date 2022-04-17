@@ -1,6 +1,6 @@
 # LOGGRY
 
-Lightweight NodeJS logger bus
+Lightweight 0-dependency, transport agnostic, ESM and CommonJS NodeJS logger bus
 
 [![Build Status][github-image]][github-url]
 [![NPM version][npm-image]][npm-url]
@@ -26,9 +26,7 @@ In the main script
 ```typescript
 import { addListener, LogEvent } from 'loggry';
 
-addListener((log: LogEvent) => {
-  console.log(log.level, log.message, 'at', log.timestamp);
-});
+addListener((log: LogEvent) => console.log(log.level, log.message, 'at', log.timestamp));
 ```
 
 In a some other place
@@ -40,10 +38,32 @@ function myFunction() {
 }
 ```
 
+Pino integration
+```typescript
+import createPino from 'pino';
+import { addListener, LogEvent } from 'loggry';
+
+const pinoLogger = createPino({
+  customLevels: {
+    error: 70,
+    warn: 60,
+    notice: 50,
+    http: 40,
+    timing: 30,
+    info: 20,
+    verbose: 10,
+    silly: 0,
+  },
+});
+
+addListener(({ level, message, details }: LogEvent) => pinoLogger[level](details, message));
+```
+
+
 ## License
 
-License [The MIT License](http://opensource.org/licenses/MIT)
-Copyright (c) 2021 Ivan Zakharchanka
+License [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+Copyright (c) 2022 Ivan Zakharchanka
 
 [npm-url]: https://www.npmjs.com/package/loggry
 [downloads-image]: https://img.shields.io/npm/dw/loggry.svg?maxAge=43200

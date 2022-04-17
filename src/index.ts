@@ -75,5 +75,5 @@ process.on(EVENT_NAME, defaultLogger);
 export const uncaughtExceptionHandler: NodeJS.UncaughtExceptionListener = (err, origin) => error(origin, err);
 process.on('uncaughtException', uncaughtExceptionHandler);
 
-export const unhandledRejectionHandler: NodeJS.UnhandledRejectionListener = (err: any) => error('unhandledRejection', err);
+export const unhandledRejectionHandler: NodeJS.UnhandledRejectionListener = (err) => error('unhandledRejection', err);
 process.on('unhandledRejection', unhandledRejectionHandler);

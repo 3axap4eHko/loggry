@@ -8,7 +8,8 @@
   "module": "./build/index.js",
   "sideEffects": false,
   "files": [
-    "build"
+    "build",
+    "src/*.ts"
   ],
   "exports": {
     "import": "./build/index.js",
@@ -39,7 +40,7 @@
     "tools"
   ],
   "author": "Ivan Zakharchanka",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/3axap4eHko/loggry/issues"
   },
