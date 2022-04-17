@@ -2,9 +2,24 @@
   "name": "loggry",
   "version": "0.0.26",
   "description": "Lightweight NodeJS logger bus",
-  "main": "build/index.js",
+  "type": "module",
+  "main": "build/index.cjs",
+  "types": "build/index.d.ts",
+  "module": "./build/index.js",
+  "sideEffects": false,
+  "files": [
+    "build"
+  ],
+  "exports": {
+    "import": "./build/index.js",
+    "default": "./build/index.js",
+    "require": "./build/index.cjs"
+  },
   "scripts": {
-    "build": "tsc",
+    "convert-cjs": "node scripts/convert-cjs.js",
+    "build": "rm -rf build && yarn build:cjs && yarn build:mjs",
+    "build:cjs": "tsc -p tsconfig.cjs.json && yarn convert-cjs",
+    "build:mjs": "tsc -p tsconfig.mjs.json --declaration",
     "test": "jest",
     "test:cov": "CI=1 jest"
   },
@@ -32,6 +47,7 @@
   "devDependencies": {
     "@types/jest": "^27.0.3",
     "@types/node": "^16.11.9",
+    "glob": "^8.0.1",
     "jest": "^27.3.1",
     "ts-jest": "^27.0.7",
     "typescript": "^4.5.2"

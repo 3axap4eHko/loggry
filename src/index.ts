@@ -40,11 +40,15 @@ export const getObject = (target: any) => {
   return target && typeof target === 'object' ? Object.getOwnPropertyNames(target).reduce((result, key) => ({ ...result, [key]: target[key] }), {} as Record<string, any>) : target;
 }
 
+export const defaultErrorOutput = (data: LogEvent<any>) => {
+  process.stderr.write(JSON.stringify(data) + '\n');
+};
+
 export const defaultLogger = (event: LogEvent<any>) => {
   const count = process.listenerCount(EVENT_NAME);
   if (count === 1) {
     const details = getObject(event.details);
-    process.stderr.write(JSON.stringify({ level: 'warn', message: `No loggers are registered`, details, timestamp: Date.now() }) + '\n')
+    defaultErrorOutput({ level: 'warn', message: `No loggers are registered`, details: { ...event, details }, timestamp: Date.now() });
   }
 };
 
@@ -67,4 +71,9 @@ export const addListener = (listener: LogListener) => process.on(EVENT_NAME, lis
 export const removeListener = (listener: LogListener) => process.off(EVENT_NAME, listener);
 
 process.on(EVENT_NAME, defaultLogger);
-process.on('uncaughtException', (err, origin) => error(origin, err));
+
+export const uncaughtExceptionHandler: NodeJS.UncaughtExceptionListener = (err, origin) => error(origin, err);
+process.on('uncaughtException', uncaughtExceptionHandler);
+
+export const unhandledRejectionHandler: NodeJS.UnhandledRejectionListener = (err: any) => error('unhandledRejection', err);
+process.on('unhandledRejection', unhandledRejectionHandler);
