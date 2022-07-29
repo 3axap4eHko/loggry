@@ -48,14 +48,14 @@ export const defaultLogger = (event: LogEvent<any>) => {
   const count = process.listenerCount(EVENT_NAME);
   if (count === 1) {
     const details = getObject(event.details);
-    defaultErrorOutput({ level: 'warn', message: `No loggers are registered`, details: { ...event, details }, timestamp: Date.now() });
+    defaultErrorOutput({ level: 'warn', message: `No loggers are registered`, details: { ...event, details }, timestamp: Date.now(), stack: new Error().stack });
   }
 };
 
 export const log = <T = any>(level: LogLevels, message: string, details?: T) => {
-  // const stack = new Error().stack?.split(/\s*\n\s*/g).slice(2).join('\n');
   const timestamp = Date.now();
-  process.emit(EVENT_NAME, { level, message, details, timestamp });
+  //const stack = new Error().stack?.split(/\s*\n\s*/g).slice(2).join('\n');
+  process.emit(EVENT_NAME, { level, message, details, timestamp, stack: new Error().stack });
 };
 
 export const verbose = <T = any>(message: string, details?: T) => log('verbose', message, details);
