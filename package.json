@@ -1,6 +1,6 @@
 {
   "name": "loggry",
-  "version": "0.2.27",
+  "version": "0.2.28",
   "description": "Lightweight NodeJS logger bus",
   "type": "module",
   "main": "build/index.cjs",
