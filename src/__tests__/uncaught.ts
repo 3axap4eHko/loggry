@@ -1,6 +1,6 @@
 import * as logger from '../index';
 
-const originalJestListeners: Record<string, any[]> = {
+const originalJestListeners: Record<string, unknown[]> = {
   uncaughtException: [],
   unhandledRejection: [],
 }
@@ -27,40 +27,45 @@ describe('Logger uncaught errors suite', () => {
   it('Shoul catch uncaughtExceptions', async () => {
     const message = 'test';
 
-    const defaultErrorOutput = jest.spyOn(logger, 'defaultErrorOutput');
-    defaultErrorOutput.mockImplementation(() => {});
-
     const originalProcess = process._original();
     originalProcess.on('uncaughtException', logger.uncaughtExceptionHandler);
+
+    const logFunction = jest.fn();
+    logger.addListener(logFunction);
+
+    process.nextTick(() => { throw message; });
+
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+    expect(logFunction).toBeCalledWith(expect.objectContaining({
+      level: 'error',
+      message: 'uncaughtException',
+      details: message,
+    }));
+
+    logger.removeListener(logFunction);
+  });
+
+  it('Shoul catch unhandledRejection', async () => {
+    const message = 'test';
+
+    const originalProcess = process._original();
     originalProcess.on('unhandledRejection', logger.unhandledRejectionHandler);
 
-    Promise.reject(new Error(message));
-    setTimeout(() => { throw new Error(message) }, 0);
+    const logFunction = jest.fn();
+    logger.addListener(logFunction);
 
-    await new Promise(resolve => setTimeout(resolve, 100));
+    Promise.reject(message);
 
-    expect(defaultErrorOutput).toBeCalledWith(expect.objectContaining({
-      level: 'warn',
-      message: 'No loggers are registered',
-      details: expect.objectContaining({
-        level: 'error',
-        message: 'uncaughtException',
-        details: expect.objectContaining({
-          message,
-        }),
-      })
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+    expect(logFunction).toBeCalledWith(expect.objectContaining({
+      level: 'error',
+      message: 'unhandledRejection',
+      details: message,
     }));
-    expect(defaultErrorOutput).toBeCalledWith(expect.objectContaining({
-      level: 'warn',
-      message: 'No loggers are registered',
-      details: expect.objectContaining({
-        level: 'error',
-        message: 'unhandledRejection',
-        details: expect.objectContaining({
-          message,
-        }),
-      })
-    }));
+
+    logger.removeListener(logFunction);
   });
 
   afterEach(() => {

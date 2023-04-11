@@ -29,12 +29,25 @@ import { addListener, LogEvent } from 'loggry';
 addListener((log: LogEvent) => console.log(log.level, log.message, 'at', log.timestamp));
 ```
 
-In a some other place
+In some other place
 ```typescript
-import { verbose } from 'loggry';
+import { debug } from 'loggry';
 
 function myFunction() {
-  verbose('myFunction', 'executed!');
+  debug('myFunction', 'executed!');
+}
+```
+
+Built-in log levels
+```typescript
+enum LogLevel {
+  silent,
+  fatal,
+  error,
+  warn,
+  info,
+  debug,
+  trace,
 }
 ```
 
@@ -43,27 +56,16 @@ Pino integration
 import createPino from 'pino';
 import { addListener, LogEvent } from 'loggry';
 
-const pinoLogger = createPino({
-  customLevels: {
-    error: 70,
-    warn: 60,
-    notice: 50,
-    http: 40,
-    timing: 30,
-    info: 20,
-    verbose: 10,
-    silly: 0,
-  },
-});
+const pinoLogger = createPino();
 
-addListener(({ level, message, details }: LogEvent) => pinoLogger[level](details, message));
+addListener(({ level, message, details }: LogEvent) => pinoLogger[level]({ details }, message));
 ```
 
 
 ## License
 
 License [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0)
-Copyright (c) 2022 Ivan Zakharchanka
+Copyright (c) 2023 Ivan Zakharchanka
 
 [npm-url]: https://www.npmjs.com/package/loggry
 [downloads-image]: https://img.shields.io/npm/dw/loggry.svg?maxAge=43200
