@@ -1,17 +1,16 @@
 module.exports = {
   verbose: true,
-  testEnvironment: 'node',
   collectCoverage: !!process.env.CI,
-  preset: 'ts-jest',
-  collectCoverageFrom: [
-    'src/**/*.ts',
-  ],
+  collectCoverageFrom: ['src/**/*.ts'],
+  testEnvironment: 'node',
   coveragePathIgnorePatterns: [
+    '/coverage',
     '/node_modules/',
-    '__fixtures__',
-    '__mocks__',
     '__tests__',
   ],
   coverageDirectory: './coverage',
+  transform: {
+    '^.+\\.ts$': '@swc/jest',
+  },
   globalSetup: './jest.setup.global.ts',
 };

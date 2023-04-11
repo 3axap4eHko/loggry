@@ -7,10 +7,13 @@ describe('Logger test suite', () => {
     ['LogLevel' as ModuleFunctions],
     ['defaultLogger' as ModuleFunctions],
     ['log' as ModuleFunctions],
-    ['verbose' as ModuleFunctions],
+    ['trace' as ModuleFunctions],
+    ['debug' as ModuleFunctions],
     ['info' as ModuleFunctions],
     ['warn' as ModuleFunctions],
     ['error' as ModuleFunctions],
+    ['fatal' as ModuleFunctions],
+    ['silent' as ModuleFunctions],
     ['addListener' as ModuleFunctions],
     ['removeListener' as ModuleFunctions],
   ])('Should export method %s', (method: ModuleFunctions) => {
@@ -18,11 +21,11 @@ describe('Logger test suite', () => {
   });
 
   it('Should register the default listener', () => {
-    process.listeners('log').includes(logger.defaultLogger);
+    process.listeners(logger.LOG_EVENT).includes(logger.defaultLogger);
   });
 
   it('Should log info', () => {
-    const level = 'silly';
+    const level = 'trace';
     const message = 'test';
     const details = 'details';
 
