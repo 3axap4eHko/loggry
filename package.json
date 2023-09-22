@@ -17,6 +17,7 @@
   "scripts": {
     "build": "rm -rf build && inop src build -p -i __tests__  && tsc --declaration --emitDeclarationOnly",
     "test": "jest",
+    "test:build": "node src/__tests__/index.cjs && node src/__tests__/index.mjs",
     "test:cov": "CI=1 jest"
   },
   "repository": {
@@ -43,9 +44,9 @@
   "devDependencies": {
     "@swc/jest": "^0.2.24",
     "@types/jest": "^29.5.0",
-    "@types/node": "^18.15.11",
+    "@types/node": "^20.6.3",
     "glob": "^10.0.0",
-    "inop": "^0.2.5",
+    "inop": "^0.4.2",
     "jest": "^29.5.0",
     "typescript": "^5.0.4"
   }
