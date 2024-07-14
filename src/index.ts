@@ -1,17 +1,11 @@
-export enum LogLevel {
-  silent,
-  fatal,
-  error,
-  warn,
-  info,
-  debug,
-  trace,
-}
-
-export type LogLevels = keyof typeof LogLevel;
+export type LogLevel = string
+  | 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal' | 'silent'
+  | 'http' | 'notice' | 'timing' | 'info' | 'verbose' | 'silly'
+  | 'alert' | 'critical' | 'serve' | 'config' | 'emergency'
+  ;
 
 export interface LogEvent<T = unknown> {
-  level: LogLevels;
+  level: LogLevel;
   message: string;
   details?: T;
   stack?: string;
@@ -50,25 +44,21 @@ export const defaultLogger = (event: LogEvent<unknown>) => {
   }
 };
 
-export const log = <T = any>(level: LogLevels, message: string, details?: T) => {
+export interface LogFunction {
+  (message: string, details?: unknown): void;
+}
+
+export const log = <T = unknown>(level: LogLevel, message: string, details?: T) => {
   const timestamp = Date.now();
   //const stack = new Error().stack?.split(/\s*\n\s*/g).slice(2).join('\n');
   process.emit(LOG_EVENT, { level, message, details, timestamp, stack: new Error().stack });
 };
 
-export const trace = <T = any>(message: string, details?: T) => log('trace', message, details);
-
-export const debug = <T = any>(message: string, details?: T) => log('debug', message, details);
-
-export const info = <T = any>(message: string, details?: T) => log('info', message, details);
-
-export const warn = <T = any>(message: string, details?: T) => log('warn', message, details);
-
-export const error = <T = any>(message: string, details?: T) => log('error', message, details);
-
-export const fatal = <T = any>(message: string, details?: T) => log('fatal', message, details);
-
-export const silent = <T = any>(message: string, details?: T) => log('silent', message, details);
+export const logger: Record<LogLevel, LogFunction> = new Proxy({}, {
+  get: function (_, logLevel: string) {
+    return (message: string, details?: unknown) => log(logLevel, message, details);
+  }
+});;
 
 export const addListener = (listener: LogListener) => process.on(LOG_EVENT, listener);
 
@@ -76,8 +66,17 @@ export const removeListener = (listener: LogListener) => process.off(LOG_EVENT, 
 
 process.on(LOG_EVENT, defaultLogger);
 
-export const uncaughtExceptionHandler: NodeJS.UncaughtExceptionListener = (err, origin) => error(origin, err);
+export const uncaughtExceptionHandler: NodeJS.UncaughtExceptionListener = (err, origin) => logger[options.uncaughtExceptionEvent](origin, err);
 process.on('uncaughtException', uncaughtExceptionHandler);
 
-export const unhandledRejectionHandler: NodeJS.UnhandledRejectionListener = (err) => error('unhandledRejection', err);
+export const unhandledRejectionHandler: NodeJS.UnhandledRejectionListener = (err) => logger[options.unhandledRejectionEvent]('unhandledRejection', err);
 process.on('unhandledRejection', unhandledRejectionHandler);
+
+export const processErrorHandler: NodeJS.UnhandledRejectionListener = (err) => logger[options.processErrorEvent]('processError', err);
+process.on('error', processErrorHandler);
+
+export const options = {
+  uncaughtExceptionEvent: 'error',
+  unhandledRejectionEvent: 'error',
+  processErrorEvent: 'error',
+};

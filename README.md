@@ -1,6 +1,7 @@
 # LOGGRY
 
-Lightweight 0-dependency, transport agnostic, ESM and CommonJS NodeJS logger bus
+Lightweight 0-dependency, transport agnostic, ESM and CommonJS logger bus for Node.js applications,
+enabling structured logging and event handling with customizable listeners and various log levels.
 
 [![Build Status][github-image]][github-url]
 [![NPM version][npm-image]][npm-url]
@@ -10,6 +11,11 @@ Lightweight 0-dependency, transport agnostic, ESM and CommonJS NodeJS logger bus
 [![Snyk][snyk-image]][snyk-url]
 
 ## Instalation
+PNPM
+```bash
+pnpm add loggry
+```
+
 YARN
 ```bash
 yarn add loggry

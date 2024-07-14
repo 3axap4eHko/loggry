@@ -1,27 +1,52 @@
-import * as logger from '../index';
+import * as loggry from '../index';
 
-type ModuleFunctions = keyof typeof logger;
+type ModuleExport = keyof typeof loggry;
 
 describe('Logger test suite', () => {
   it.each([
-    ['LogLevel' as ModuleFunctions],
-    ['defaultLogger' as ModuleFunctions],
-    ['log' as ModuleFunctions],
-    ['trace' as ModuleFunctions],
-    ['debug' as ModuleFunctions],
-    ['info' as ModuleFunctions],
-    ['warn' as ModuleFunctions],
-    ['error' as ModuleFunctions],
-    ['fatal' as ModuleFunctions],
-    ['silent' as ModuleFunctions],
-    ['addListener' as ModuleFunctions],
-    ['removeListener' as ModuleFunctions],
-  ])('Should export method %s', (method: ModuleFunctions) => {
-    expect(logger[method]).toBeDefined();
+    ['defaultLogger' as ModuleExport],
+    ['log' as ModuleExport],
+    ['logger' as ModuleExport],
+    ['getObject' as ModuleExport],
+    ['defaultErrorOutput' as ModuleExport],
+    ['addListener' as ModuleExport],
+    ['removeListener' as ModuleExport],
+    ['options' as ModuleExport],
+  ])('Should export %s', (name: ModuleExport) => {
+    expect(loggry[name]).toBeDefined();
   });
 
   it('Should register the default listener', () => {
-    process.listeners(logger.LOG_EVENT).includes(logger.defaultLogger);
+    process.listeners(loggry.LOG_EVENT).includes(loggry.defaultLogger);
+    const write = jest.spyOn(process.stderr, 'write');
+    write.mockImplementationOnce(Boolean);
+    loggry.defaultLogger({
+      level: 'trace',
+      message: '',
+      details: null,
+      timestamp: 1,
+    });
+    expect(write).toHaveBeenCalled();
+  });
+
+  it('Should get only own object properties', () => {
+    const input = {};
+    Object.defineProperty(input, 'a', { value: 1, enumerable: true });
+    Object.defineProperty(input, 'b', { value: 2, enumerable: false });
+    const result = loggry.getObject(input);
+    expect(result).toEqual({ a: 1 });
+  });
+
+  it('Should write to stderr by defaultErrorOutput', () => {
+    const write = jest.spyOn(process.stderr, 'write');
+    write.mockImplementationOnce(Boolean);
+    loggry.defaultErrorOutput({
+      level: 'trace',
+      message: '',
+      details: null,
+      timestamp: 1,
+    });
+    expect(write).toHaveBeenCalled();
   });
 
   it('Should log info', () => {
@@ -31,8 +56,8 @@ describe('Logger test suite', () => {
 
     const logFunction = jest.fn();
 
-    logger.addListener(logFunction);
-    logger.log(level, message, details);
+    loggry.addListener(logFunction);
+    loggry.log(level, message, details);
     expect(logFunction).toHaveBeenCalledWith(
       expect.objectContaining({
         level,
@@ -41,6 +66,6 @@ describe('Logger test suite', () => {
         timestamp: expect.any(Number),
       })
     );
-    logger.removeListener(logFunction);
+    loggry.removeListener(logFunction);
   });
 });
