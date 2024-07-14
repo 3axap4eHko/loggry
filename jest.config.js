@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   verbose: true,
   collectCoverage: !!process.env.CI,
   collectCoverageFrom: ['src/**/*.ts'],
@@ -12,5 +12,4 @@ module.exports = {
   transform: {
     '^.+\\.ts$': '@swc/jest',
   },
-  globalSetup: './jest.setup.global.ts',
 };
