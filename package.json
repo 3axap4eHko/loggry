@@ -41,7 +41,7 @@
     "url": "https://github.com/3axap4eHko/loggry/issues"
   },
   "homepage": "https://github.com/3axap4eHko/loggry#readme",
-  "packageManager": "pnpm@9.10.0",
+  "packageManager": "pnpm@9.11.0",
   "devDependencies": {
     "@swc/jest": "^0.2.36",
     "@types/jest": "^29.5.13",
