@@ -43,7 +43,7 @@
   "homepage": "https://github.com/3axap4eHko/loggry#readme",
   "packageManager": "pnpm@9.15.9",
   "devDependencies": {
-    "@swc/jest": "^0.2.37",
+    "@swc/jest": "^0.2.38",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.30",
     "inop": "^0.7.4",
