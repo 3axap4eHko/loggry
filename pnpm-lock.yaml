@@ -18,8 +18,8 @@ importers:
         specifier: ^20.19.24
         version: 20.19.24
       inop:
-        specifier: ^0.7.31
-        version: 0.7.31
+        specifier: ^0.7.32
+        version: 0.7.32
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.19.24)
@@ -774,8 +774,8 @@ packages:
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
-  inop@0.7.31:
-    resolution: {integrity: sha512-2Q+d/A930FHgyENcXRsZg0NycXgws5MhifYOnpI4CeykIAPt3i60TTjznFoB/ANL6jtSzYqAsUkz6RGuDfR0zg==}
+  inop@0.7.32:
+    resolution: {integrity: sha512-Qhlv4yKCKG4YFt09yu/h7hA01jXobRdISpeDLzEdnqRQ8KjRbdWA3ww2KQtaSMl07Q8pbkkkMp2sEf82pg7nQA==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -2198,7 +2198,7 @@ snapshots:
 
   inherits@2.0.4: {}
 
-  inop@0.7.31:
+  inop@0.7.32:
     dependencies:
       '@swc/core': 1.13.21
       commander: 13.1.0
